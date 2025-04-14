@@ -15,10 +15,19 @@ function Router() {
   const [location, setLocation] = useLocation();
   const [introStage, setIntroStage] = useState<IntroStage>("intro");
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
-  const [skipIntro, setSkipIntro] = useState(false);
+  const [isDebug, setIsDebug] = useState(false);
 
-  // Check if we should skip intro (e.g., when refreshing inside the app)
+  // For testing purposes - add ?debug=true to URL to skip intro
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const debug = urlParams.get('debug') === 'true';
+    
+    if (debug) {
+      console.log("Debug mode active - skipping to main content");
+      setIntroStage("main");
+      setIsDebug(true);
+    }
+    
     // Skip intro if there's a hash/fragment in the URL (indicates a section on the page)
     const hasFragment = window.location.hash !== "";
     
@@ -27,17 +36,18 @@ function Router() {
     
     if (hasFragment || hasSeenIntro) {
       setIntroStage("main");
-      setSkipIntro(true);
     }
   }, []);
 
   // Handle the TUDUM intro animation ending
   const handleIntroEnd = () => {
+    console.log("Intro animation ended, showing profiles");
     setIntroStage("profiles");
   };
 
   // Handle profile selection
   const handleProfileSelect = (profileId: string) => {
+    console.log("Profile selected:", profileId);
     setSelectedProfile(profileId);
     setIntroStage("main");
     
@@ -47,15 +57,20 @@ function Router() {
 
   // Skip button handler
   const handleSkipIntro = () => {
-    setIntroStage("main");
-    setSkipIntro(true);
-    sessionStorage.setItem("hasSeenIntro", "true");
+    console.log("Skipping intro");
+    if (introStage === "intro") {
+      setIntroStage("profiles");
+    } else {
+      setIntroStage("main");
+    }
   };
 
+  console.log("Current intro stage:", introStage);
+
   return (
-    <>
+    <div className="min-h-screen bg-[#141414]">
       {/* Netflix TUDUM intro */}
-      {introStage === "intro" && !skipIntro && (
+      {introStage === "intro" && !isDebug && (
         <div className="relative">
           <NetflixIntro onIntroEnd={handleIntroEnd} />
           <button 
@@ -68,7 +83,7 @@ function Router() {
       )}
       
       {/* Who's watching? Profile selection */}
-      {introStage === "profiles" && !skipIntro && (
+      {introStage === "profiles" && !isDebug && (
         <ProfileSelection onProfileSelect={handleProfileSelect} />
       )}
       
@@ -79,7 +94,7 @@ function Router() {
           <Route component={NotFound} />
         </Switch>
       )}
-    </>
+    </div>
   );
 }
 

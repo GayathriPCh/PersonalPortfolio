@@ -2,24 +2,27 @@ import { useState } from 'react';
 import { PlusCircle, Edit, Bell } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
+// Import Gayathri's profile photo
+import gayathriAvatarPath from "@assets/1743007796405.jpg";
+
 // Define profiles
 const profiles = [
   {
     id: 'gayathri',
     name: 'Gayathri',
-    avatar: '/attached_assets/1743007796405.jpg',
+    avatar: gayathriAvatarPath,
     isMain: true
   },
   {
     id: 'recruiter',
     name: 'Recruiter',
-    avatar: 'https://i.pravatar.cc/150?img=2',
+    avatar: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150"><rect width="150" height="150" fill="%23444"/><text x="75" y="85" font-family="Arial" font-size="50" text-anchor="middle" fill="white">R</text></svg>',
     isMain: false
   },
   {
     id: 'guest',
     name: 'Guest',
-    avatar: 'https://i.pravatar.cc/150?img=3',
+    avatar: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150"><rect width="150" height="150" fill="%23333"/><text x="75" y="85" font-family="Arial" font-size="50" text-anchor="middle" fill="white">G</text></svg>',
     isMain: false
   },
   {

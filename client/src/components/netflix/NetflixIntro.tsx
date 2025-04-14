@@ -8,45 +8,45 @@ export default function NetflixIntro({ onIntroEnd }: NetflixIntroProps) {
   const [animationStage, setAnimationStage] = useState(0);
   
   useEffect(() => {
-    // Timeline for the Netflix intro animation
-    const timeline = [
-      { stage: 1, delay: 500 },    // Show N logo
-      { stage: 2, delay: 1500 },   // Animation grows
-      { stage: 3, delay: 2500 },   // Begin fade out
-      { stage: 4, delay: 3000 },   // Complete animation and notify parent
-    ];
-    
-    let timeoutId: number;
-    
-    const runTimeline = (index: number) => {
-      if (index >= timeline.length) {
+    // Define an async function to control our animation sequence
+    const playIntroSequence = async () => {
+      try {
+        // Show N logo
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setAnimationStage(1);
+        
+        // Animation grows
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        setAnimationStage(2);
+        
+        // Display TUDUM animation
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        setAnimationStage(3);
+        
+        // Fade out and complete animation
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Notify parent component that intro is done
+        console.log("Intro animation complete, switching to profiles");
         onIntroEnd();
-        return;
+      } catch (error) {
+        console.error("Error in intro animation:", error);
+        // Fallback in case of error
+        onIntroEnd();
       }
-      
-      const step = timeline[index];
-      timeoutId = window.setTimeout(() => {
-        setAnimationStage(step.stage);
-        runTimeline(index + 1);
-      }, step.delay);
     };
     
     // Start the animation sequence
-    runTimeline(0);
+    playIntroSequence();
     
-    // Play TUDUM sound (simulated with CSS animation since actual sound would need user interaction)
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [animationStage, onIntroEnd]);
+    // No cleanup needed for this approach
+  }, [onIntroEnd]);
   
   return (
     <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
       {/* Netflix logo animation */}
       <div 
-        className={`transition-all duration-[2000ms] ease-in-out ${
+        className={`transition-all duration-1000 ease-in-out ${
           animationStage === 0 ? 'opacity-0 scale-[0.2]' : 
           animationStage === 1 ? 'opacity-100 scale-[0.8]' : 
           animationStage === 2 ? 'opacity-100 scale-100' : 
