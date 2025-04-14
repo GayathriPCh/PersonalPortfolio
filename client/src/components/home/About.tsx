@@ -1,101 +1,156 @@
-import { Download, ArrowRight } from "lucide-react";
-import { FaGraduationCap, FaSchool } from "react-icons/fa";
+import { Download, ArrowRight, Award, Play, Info } from "lucide-react";
+import { FaGraduationCap, FaSchool, FaAward } from "react-icons/fa";
 import { EDUCATION, CERTIFICATIONS } from "@/lib/constants";
+import { useState } from "react";
 
 export default function About() {
+  const [showMore, setShowMore] = useState(false);
+  
   return (
-    <section id="about" className="py-16 md:py-24 bg-white">
+    <section id="about" className="py-16 md:py-24 bg-[#141414]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="md:flex md:items-start md:justify-between">
           <div className="md:w-1/3">
-            <h2 className="section-heading">
+            <h2 className="section-heading mb-4">
               About Me
             </h2>
+            <p className="netflix-subheading hidden md:block">
+              The story so far...
+            </p>
           </div>
           
           <div className="md:w-2/3 mt-8 md:mt-0">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-              <div className="md:col-span-5">
-                <div className="relative">
-                  <div className="absolute -inset-1 rounded-2xl bg-gradient-primary blur opacity-20"></div>
-                  <div className="relative overflow-hidden rounded-2xl shadow-lg">
-                    <img 
-                      src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80" 
-                      alt="Modern portfolio background" 
-                      className="w-full h-80 object-cover"
-                    />
+            {/* Netflix-style card design */}
+            <div className="netflix-card overflow-hidden">
+              {/* Hero image with overlay */}
+              <div className="relative h-64 md:h-80">
+                <img 
+                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80" 
+                  alt="Modern portfolio background" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#181818] to-transparent"></div>
+                <div className="absolute bottom-0 left-0 p-6">
+                  <h3 className="text-3xl text-white font-bold">My Journey</h3>
+                  <div className="flex items-center space-x-3 mt-2 text-sm">
+                    <span className="text-[#e50914] font-bold">CS Student</span>
+                    <span className="text-gray-400">|</span>
+                    <span>Class of 2026</span>
+                    <span className="text-gray-400">|</span>
+                    <span className="border border-gray-500 px-1 text-xs">Resume</span>
                   </div>
-                </div>
-                
-                <div className="mt-6 p-6 bg-gray-50 rounded-xl border border-gray-100 shadow-sm">
-                  <h3 className="font-playfair text-xl font-semibold text-gray-900">Education</h3>
-                  <ul className="mt-3 space-y-3">
-                    {EDUCATION.map((item, index) => (
-                      <li key={index} className="flex items-start">
-                        <span className="flex-shrink-0 h-5 w-5 rounded-full bg-primary-100 flex items-center justify-center text-primary-700">
-                          {item.icon === "graduation-cap" ? (
-                            <FaGraduationCap className="text-xs" />
-                          ) : (
-                            <FaSchool className="text-xs" />
-                          )}
-                        </span>
-                        <div className="ml-3">
-                          <p className="text-sm font-medium text-gray-900">{item.school}</p>
-                          <p className="text-xs text-gray-500">{item.degree} ({item.period})</p>
-                          <p className="text-xs font-medium text-primary-600">{item.score}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               </div>
               
-              <div className="md:col-span-7 space-y-6 mt-6 md:mt-0">
-                <div className="pull-quote">
-                  <p className="text-lg text-gray-600 italic font-playfair">
-                    As a pre-final year Computer Science student, I'm passionate about building scalable, secure software solutions that make a difference.
-                  </p>
-                </div>
-                
-                <p className="text-gray-600">
-                  I'm a CS student graduating in 2026, with a strong foundation in Java, Python, and C. My expertise spans distributed systems, information retrieval, and AI-powered applications. I'm excited to contribute to next-generation technologies in Software Engineering roles.
-                </p>
-
-                <div className="bg-gradient-to-r from-primary-50 to-white p-5 rounded-lg border-l-4 border-primary">
-                  <h3 className="font-playfair text-xl font-semibold text-gray-900">Global Certifications</h3>
-                  <div className="mt-3 flex flex-wrap gap-3">
-                    {CERTIFICATIONS.map((cert, index) => (
-                      <span key={index} className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white text-gray-700 border border-gray-200 shadow-sm">
-                        {cert.icon === "aws" && <FaGraduationCap className="text-orange-500 mr-2" />}
-                        {cert.icon === "redhat" && <FaGraduationCap className="text-red-600 mr-2" />}
-                        {cert.icon === "database" && <FaGraduationCap className="text-green-600 mr-2" />}
-                        {cert.name}
-                      </span>
-                    ))}
+              {/* Content area */}
+              <div className="p-6 space-y-6">
+                {/* Introduction */}
+                <div className="space-y-4">
+                  <div className="text-white text-lg leading-relaxed">
+                    <p className="mb-4">
+                      As a pre-final year Computer Science student, I'm passionate about building scalable, secure software solutions that make a difference.
+                    </p>
+                    <p>
+                      I have a strong foundation in Java, Python, and C. My expertise spans distributed systems, information retrieval, and AI-powered applications. I'm excited to contribute to next-generation technologies in Software Engineering roles.
+                    </p>
                   </div>
+                  
+                  {showMore && (
+                    <div className="text-white text-lg leading-relaxed animate-in fade-in duration-300">
+                      <p className="mb-4">
+                        I'm passionate about leveraging technology to solve complex problems. My goal is to contribute to innovative projects that combine cutting-edge technologies with practical applications, particularly in AI, distributed systems, and cloud computing.
+                      </p>
+                    </div>
+                  )}
+                  
+                  <button 
+                    onClick={() => setShowMore(!showMore)}
+                    className="text-gray-400 hover:text-white transition-colors flex items-center"
+                  >
+                    {showMore ? "Show Less" : "Show More"}
+                    <ArrowRight size={16} className={`ml-1 transition-transform duration-300 ${showMore ? 'rotate-90' : ''}`} />
+                  </button>
                 </div>
                 
-                <div>
-                  <h3 className="font-playfair text-xl font-semibold text-gray-900">Looking Forward</h3>
-                  <p className="mt-2 text-gray-600">
-                    I'm passionate about leveraging technology to solve complex problems. My goal is to contribute to innovative projects that combine cutting-edge technologies with practical applications, particularly in AI, distributed systems, and cloud computing.
-                  </p>
-                </div>
-                
-                <div className="flex flex-wrap gap-4 pt-2">
-                  <a href="#skills" className="font-montserrat inline-flex items-center px-5 py-2 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 transition-all">
-                    Explore My Skills
-                    <ArrowRight size={16} className="ml-2" />
-                  </a>
+                {/* Netflix-style buttons */}
+                <div className="flex flex-wrap gap-4">
                   <a 
                     href="/attached_assets/GayathriP_SWE_Resume_Google.pdf" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="font-montserrat inline-flex items-center px-5 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-all"
+                    className="netflix-btn flex items-center"
                   >
-                    <Download size={16} className="mr-2" />
-                    Download CV
+                    <Play size={18} className="mr-2" />
+                    View Resume
                   </a>
+                  <a 
+                    href="#skills" 
+                    className="netflix-btn-outline flex items-center"
+                  >
+                    <Info size={18} className="mr-2" />
+                    More Details
+                  </a>
+                </div>
+                
+                {/* Education - Netflix style */}
+                <div className="mt-8 pt-6 border-t border-gray-800">
+                  <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+                    <Award size={20} className="text-[#e50914] mr-2" />
+                    Education
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    {EDUCATION.map((item, index) => (
+                      <div key={index} className="flex p-3 netflix-card">
+                        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-[#333] flex items-center justify-center text-[#e50914]">
+                          {item.icon === "graduation-cap" ? (
+                            <FaGraduationCap className="text-lg" />
+                          ) : (
+                            <FaSchool className="text-lg" />
+                          )}
+                        </div>
+                        <div className="ml-4">
+                          <p className="text-white font-bold">{item.school}</p>
+                          <p className="text-gray-400 text-sm">{item.degree} ({item.period})</p>
+                          <p className="text-[#e50914] text-sm font-medium">{item.score}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Certifications - Top 10 style */}
+                <div className="mt-8 pt-6 border-t border-gray-800">
+                  <h3 className="netflix-row-title flex items-center mb-4">
+                    <FaAward className="text-[#e50914] mr-2" />
+                    Global Certifications
+                  </h3>
+                  
+                  <div className="netflix-carousel pb-4">
+                    {CERTIFICATIONS.map((cert, index) => (
+                      <div key={index} className="flex-none w-64 mr-4">
+                        <div className="netflix-card p-4 relative h-32 flex flex-col justify-between">
+                          <div className="absolute right-3 top-3 text-3xl font-bold text-[#e50914]/30">
+                            {index + 1}
+                          </div>
+                          <div>
+                            <div className="flex items-center">
+                              {cert.icon === "aws" && <div className="h-6 w-6 bg-orange-500 rounded flex items-center justify-center text-white mr-2"><FaGraduationCap /></div>}
+                              {cert.icon === "redhat" && <div className="h-6 w-6 bg-red-600 rounded flex items-center justify-center text-white mr-2"><FaGraduationCap /></div>}
+                              {cert.icon === "database" && <div className="h-6 w-6 bg-green-600 rounded flex items-center justify-center text-white mr-2"><FaGraduationCap /></div>}
+                              <span className="text-white font-bold">{cert.name}</span>
+                            </div>
+                            <p className="text-gray-400 text-sm mt-2">
+                              Certification
+                            </p>
+                          </div>
+                          <div className="text-[#e50914] text-xs font-bold">
+                            VERIFIED
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
