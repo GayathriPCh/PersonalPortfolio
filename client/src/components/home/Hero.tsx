@@ -15,7 +15,7 @@ export default function Hero() {
         
         {/* Video/Image Background */}
         <img 
-          src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80" 
+          src="https://i.pinimg.com/originals/19/b2/8c/19b28c8372aaec65623f7ee7332e74be.gif" 
           alt="Hero background" 
           className="w-full h-full object-cover opacity-60" 
         />

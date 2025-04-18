@@ -3,6 +3,7 @@ import { FaGraduationCap, FaSchool, FaAward } from "react-icons/fa";
 import { EDUCATION, CERTIFICATIONS } from "@/lib/constants";
 import { useState } from "react";
 
+
 export default function About() {
   const [showMore, setShowMore] = useState(false);
   
@@ -25,7 +26,7 @@ export default function About() {
               {/* Hero image with overlay */}
               <div className="relative h-64 md:h-80">
                 <img 
-                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80" 
+                  src="https://i.pinimg.com/originals/85/f1/18/85f11844c6819123e5731504075cf8e7.gif" 
                   alt="Modern portfolio background" 
                   className="w-full h-full object-cover"
                 />

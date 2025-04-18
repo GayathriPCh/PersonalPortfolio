@@ -9,7 +9,7 @@ import NetflixIntro from "@/components/netflix/NetflixIntro";
 import ProfileSelection from "@/components/netflix/ProfileSelection";
 
 // Netflix intro stages
-type IntroStage = "intro" | "profiles" | "main";
+type IntroStage = "intro" | "profiles" | "main" | "transition";
 
 function Router() {
   const [location, setLocation] = useLocation();
@@ -49,10 +49,15 @@ function Router() {
   const handleProfileSelect = (profileId: string) => {
     console.log("Profile selected:", profileId);
     setSelectedProfile(profileId);
-    setIntroStage("main");
     
-    // Store that user has seen the intro in this session
-    sessionStorage.setItem("hasSeenIntro", "true");
+    // Start transition
+    setIntroStage("transition");
+    
+    // After transition, move to main content
+    setTimeout(() => {
+      setIntroStage("main");
+      sessionStorage.setItem("hasSeenIntro", "true");
+    }, 50); // Reduced from 1200ms to 200ms to show content right after profile expansion starts
   };
 
   // Skip button handler
@@ -72,7 +77,7 @@ function Router() {
       {/* Netflix TUDUM intro */}
       {introStage === "intro" && !isDebug && (
         <div className="relative">
-          <NetflixIntro onIntroEnd={handleIntroEnd} />
+          <NetflixIntro letter="N" onAnimationComplete={handleIntroEnd} />
           <button 
             onClick={handleSkipIntro} 
             className="absolute top-6 right-6 text-gray-400 hover:text-white text-sm py-1 px-4 border border-gray-600 rounded"
@@ -87,7 +92,7 @@ function Router() {
         <ProfileSelection onProfileSelect={handleProfileSelect} />
       )}
       
-      {/* Main content - only shown after intro sequence or if skipped */}
+      {/* Main content - shown after the transition */}
       {introStage === "main" && (
         <Switch>
           <Route path="/" component={Home} />

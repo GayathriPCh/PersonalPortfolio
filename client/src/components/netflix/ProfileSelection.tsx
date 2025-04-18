@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { PlusCircle, Edit, Bell } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 // Import Gayathri's profile photo
 import gayathriAvatarPath from "@assets/1743007796405.jpg";
+import redavatar from "@assets/red.png";
+import yellowavatar from "@assets/yellow.png";
 
 // Define profiles
 const profiles = [
@@ -16,13 +18,13 @@ const profiles = [
   {
     id: 'recruiter',
     name: 'Recruiter',
-    avatar: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150"><rect width="150" height="150" fill="%23444"/><text x="75" y="85" font-family="Arial" font-size="50" text-anchor="middle" fill="white">R</text></svg>',
+    avatar: redavatar,
     isMain: false
   },
   {
     id: 'guest',
     name: 'Guest',
-    avatar: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150"><rect width="150" height="150" fill="%23333"/><text x="75" y="85" font-family="Arial" font-size="50" text-anchor="middle" fill="white">G</text></svg>',
+    avatar: yellowavatar,
     isMain: false
   },
   {
@@ -41,6 +43,8 @@ interface ProfileSelectionProps {
 export default function ProfileSelection({ onProfileSelect }: ProfileSelectionProps) {
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
   const [hoverProfile, setHoverProfile] = useState<string | null>(null);
+  const [isExpanding, setIsExpanding] = useState(false);
+  const selectedProfileRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
   const handleProfileHover = (profileId: string | null) => {
@@ -48,7 +52,6 @@ export default function ProfileSelection({ onProfileSelect }: ProfileSelectionPr
   };
   
   const handleProfileClick = (profileId: string) => {
-    // If it's the Add Profile button, show a message
     const profile = profiles.find(p => p.id === profileId);
     if (profile?.isAdd) {
       toast({
@@ -58,18 +61,32 @@ export default function ProfileSelection({ onProfileSelect }: ProfileSelectionPr
       return;
     }
     
-    // Otherwise select profile
     setSelectedProfile(profileId);
+    setIsExpanding(true);
     
-    // Slight delay to show selection before navigating
+    const profileElement = selectedProfileRef.current;
+    if (profileElement) {
+      const rect = profileElement.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      profileElement.style.transformOrigin = `${centerX}px ${centerY}px`;
+    }
+    
+    // Wait for the expansion animation before showing main content
     setTimeout(() => {
       onProfileSelect(profileId);
-    }, 800);
+    }, 1000);
   };
   
   return (
-    <div className="fixed inset-0 bg-[#141414] flex flex-col items-center justify-center z-50">
-      <header className="absolute top-0 left-0 right-0 p-6">
+    <div className={`fixed inset-0 bg-[#141414] flex flex-col items-center justify-center z-50 transition-opacity duration-500 ${isExpanding ? 'opacity-0' : 'opacity-100'}`}>
+      {/* Netflix intro background - shown during transition */}
+      {selectedProfile && isExpanding && (
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-red-600 via-purple-600 to-blue-600 animate-pulse" />
+      )}
+      
+      <header className="absolute top-0 left-0 right-0 p-6 z-10">
         <div className="flex justify-between items-center">
           <div className="netflix-logo text-3xl">GAYATHRI</div>
           <div className="flex items-center space-x-4">
@@ -83,14 +100,19 @@ export default function ProfileSelection({ onProfileSelect }: ProfileSelectionPr
         </div>
       </header>
       
-      <div className="text-center">
+      <div className="text-center z-10">
         <h1 className="text-white text-4xl font-medium mb-8">Who's browsing?</h1>
         
         <div className="flex flex-wrap justify-center gap-6 md:gap-8">
           {profiles.map((profile) => (
             <div 
               key={profile.id}
-              className="relative cursor-pointer group"
+              ref={selectedProfile === profile.id ? selectedProfileRef : null}
+              className={`relative cursor-pointer group ${
+                selectedProfile === profile.id && isExpanding 
+                  ? 'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] transition-all duration-1000 ease-out scale-[20] opacity-0' 
+                  : ''
+              }`}
               onMouseEnter={() => handleProfileHover(profile.id)}
               onMouseLeave={() => handleProfileHover(null)}
               onClick={() => handleProfileClick(profile.id)}

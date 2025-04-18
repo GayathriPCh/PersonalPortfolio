@@ -94,7 +94,8 @@ export default function Experience() {
             {/* Netflix top banner */}
             <div className="relative h-48 mb-8 rounded-lg overflow-hidden hidden md:block">
               <img 
-                src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80" 
+                src="https://i.pinimg.com/originals/f5/93/a5/f593a5c372d18c0c68738ccec5c41033.gif" 
+                
                 alt="Experience banner" 
                 className="w-full h-full object-cover"
               />
